@@ -1,0 +1,52 @@
+Total Age 0-5 Enrollments = SUM(final_aadhar_enrollment_data[age_0_5])
+
+Total Age 5-17 Enrollments = SUM(final_aadhar_enrollment_data[age_5_17])
+
+Child Enrollment Share = 
+DIVIDE (
+    [Total Age 0-5 Enrollments] + [Total Age 5-17 Enrollments],
+    [Total Enrollments]
+)
+
+Adult Enrollment Share = 
+DIVIDE(
+    SUM(final_aadhar_enrollment_data[age_18_greater]),
+    [Total Enrollments]
+)
+
+Adult Update Share = 
+DIVIDE (
+    [Biometric Updates 17+] + [Demographic Updates 17+],
+    [Total Updates]
+)
+
+Demographic Updates 17+ = SUM(final_demographic_data[demo_age_17_])
+
+Biometric Updates 17+ = SUM(final_biometric_data[bio_age_17_])
+
+Total Enrollments = 
+SUM ( final_aadhar_enrollment_data[total_enrollments] )
+
+Total Biometric Updates = 
+SUM (final_biometric_data[total_biometric])
+
+Total Demographic Updates = 
+SUM ( final_demographic_data[total_demography] )
+
+Total Updates = 
+[Total Biometric Updates] + [Total Demographic Updates]
+
+MoM Enrolment Change = 
+[Total Enrollments]
+-
+CALCULATE(
+    [Total Enrollments],
+    PARALLELPERIOD(Dim_Date[month_start], -1, MONTH)
+)
+
+Update Intensity = 
+    DIVIDE ( [Total Updates], [Total Enrollments] )
+
+Update Load Ratio (Raw) = 
+DIVIDE ( [Total Updates], [Total Enrollments] )
+
